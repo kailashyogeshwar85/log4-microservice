@@ -67,10 +67,10 @@ const user = {
 };
 
 logger.info('serverlog');
-const controller = new UserController();
-controller.doSomething();
-logger.debug('serverlog');
-logger.error('serverlog', new Error('myerror'));
-const payment = require('./payment');
+// const controller = new UserController();
+// controller.doSomething();
+logger.debug('serverlog', user, { transaction_id: 1, gateway: 101 });
+// logger.error('serverlog', new Error('myerror'));
+// const payment = require('./payment');
 
-new payment().doSomething();
+// new payment().doSomething();

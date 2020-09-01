@@ -4,11 +4,12 @@ const {
   transports,
   format,
 }                        = require('winston');
-const flatten            = require('flatten');
 const { ensureDirSync }  = require('fs-extra');
+const BaseLogger         = require('./BaseLogger');
 
-class WinstonAdapter {
+class WinstonAdapter extends BaseLogger {
   constructor(logOptions) {
+    super(logOptions);
     this.env = process.env.NODE_ENV || process.env.NODE || 'local';
     this.service = process.env.SERVICE || basename(process.cwd());
     this.zone = logOptions.zone || 'IN';
@@ -20,45 +21,16 @@ class WinstonAdapter {
     this.configure();
   }
 
-  // eslint-disable-next-line
-  formatMessage(data) {
-    return flatten(data)[0] || {};
-  }
-
   debug(log, scope, ...args) {
-    this.logger.debug({
-      meta: scope,
-      message: log,
-      event: this.formatMessage(args),
-    });
+    super.debug.call(this, log, scope, args);
   }
 
   info(log, scope, ...args) {
-    this.logger.info({
-      meta: scope,
-      message: log,
-      event: this.formatMessage(args),
-    });
+    super.info.call(this, log, scope, args);
   }
 
   error(log, scope, ...args) {
-    this.logger.error({
-      meta: scope,
-      message: log.message || log,
-      error: WinstonAdapter.serializeError(args),
-    });
-  }
-
-  static prettyMessage(log) {
-    const colorize = format.colorize();
-    const service  = log.level === 'info'
-      ? ` [${log.microservice}] [${log.meta.substr(0, 6)}]`
-      : `[${log.microservice}] [${log.meta.substr(0, 6)}]`;
-    const mesg  = log.level === 'info' ? log.message.substr(1) : log.message;
-    return colorize.colorize(
-      log.level,
-      `${log.level.toUpperCase()} ${service} ${mesg} ${JSON.stringify(log.event || log.error)}`,
-    );
+    super.error.call(this, log, scope, args);
   }
 
   getTransports() {
@@ -67,7 +39,7 @@ class WinstonAdapter {
       format: format.combine(
         format.simple(),
         format.padLevels(),
-        format.printf((msg) => WinstonAdapter.prettyMessage(msg)),
+        format.printf((msg) => BaseLogger.prettyMessage(msg)),
       ),
       handleExceptions: this.env === 'production',
     });
@@ -82,17 +54,6 @@ class WinstonAdapter {
       level: this.logLevel,
     });
     return { consoleOptions, fileOptions };
-  }
-
-  static serializeError(error) {
-    const err = error.filter((el) => el);
-    if (!err) {
-      return {};
-    }
-    if (err && err[0] && err[0] instanceof Error) {
-      return { name: err[0].name, reason: err[0].message, stack: err[0].stack };
-    }
-    return { name: 'Error', reason: JSON.stringify(err), stack: {} };
   }
 
   configure() {

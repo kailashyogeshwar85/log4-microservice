@@ -10,7 +10,7 @@ class UserController {
   }
 
   configureLogger() {
-    this.logger = new MLogger(__filename);
+    this.logger = new MLogger('userco');
   }
 
   doSomething() {
