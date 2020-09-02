@@ -21,7 +21,7 @@ configureLogger();
 
 const logger = new MLogger(__filename);
 
-logger.log('debug', 'starting to listen for new job on queue: payments');
+// logger.log('debug', 'starting to listen for new job on queue: payments');
 
 const Job = require('./job');
 
@@ -37,15 +37,14 @@ const getJob = () => ({
   user_id: ++USER_ID,
 });
 
-setInterval(() => {
-  new Job(getJob()).processJob();
-}, 2000);
-const Controller = require('./controller');
+// setInterval(() => {
+//   new Job(getJob()).processJob();
+// }, 2000);
 
 logger.info('Initilazling user controller');
 logger.info('do something');
 
-const user = new Controller();
+const user = new UserController();
 
 user.doSomething();
 

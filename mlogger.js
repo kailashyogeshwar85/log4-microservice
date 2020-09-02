@@ -49,26 +49,26 @@ class MLogger {
     return MLogger.AdapterName;
   }
 
-  debug(msg, arg, correlationIds) {
-    this.log('debug', msg, this.scope, arg, correlationIds);
+  debug(msg, ...arg) {
+    this.log('debug', msg, this.scope, arg, arg.pop());
   }
 
-  info(msg, arg, correlationIds) {
-    this.log('info', msg, this.scope, arg, correlationIds);
+  info(msg, ...arg) {
+    this.log('info', msg, this.scope, arg.pop());
   }
 
-  error(msg, arg, correlationIds) {
-    this.log('error', msg, this.scope, arg, correlationIds);
+  error(msg, ...arg) {
+    this.log('error', msg, this.scope, arg.pop());
   }
 
-  log(level = 'debug', msg, scope = this.scope, args, correlationIds = {}) {
+  log(level = 'debug', msg, scope = this.scope, ...args) {
     if (!MLogger.Adapter) {
       throw new Error('MLogger not configured');
     }
     if (MLogger.Adapter) {
       this.adapter = MLogger.AdapterMap.get(MLogger.AdapterName);
     }
-    this.adapter[level](msg, scope, args, { ...correlationIds, ...this.context });
+    this.adapter[level](msg, scope, args, { ...args.pop(), ...this.context });
   }
 }
 
