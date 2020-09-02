@@ -49,9 +49,6 @@ class PinoAdapter extends BaseLogger {
       name: this.service,
       level: this.logLevel,
       messageKey: 'message',
-      serializers: {
-        error: BaseLogger.serializeError,
-      },
       formatters: {
         level: (label) => ({ level: label.toUpperCase() }),
       },
