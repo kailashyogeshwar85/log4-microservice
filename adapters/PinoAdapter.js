@@ -1,14 +1,15 @@
 const { join, basename }    = require('path');
 const Pino                  = require('pino-multi-stream');
-const flatten               = require('flatten');
 const {
   createWriteStream,
   ensureDirSync,
 }                           = require('fs-extra');
+const BaseLogger            = require('./BaseLogger');
 
-// TODO: BaseLogger, LogRotation, Correlation Meta
-class PinoAdapter {
+// TODO: LogRotation, Correlation Meta
+class PinoAdapter extends BaseLogger {
   constructor(logOptions) {
+    super();
     this.env        = process.env.NODE_ENV || process.env.NODE || 'local';
     this.service    = process.env.SERVICE || basename(process.cwd());
     this.zone       = logOptions.zone || 'IN';
@@ -20,35 +21,16 @@ class PinoAdapter {
     this.configure();
   }
 
-  setScope(scope) {
-    this.scope = scope;
-    this.logger = this.logger.child({
-      microservice: this.service,
-      zone: this.zone,
-      meta: this.getScope(),
-      env: this.env,
-    });
+  debug(log, scope, ...args) {
+    super.debug.call(this, log, scope, args);
   }
 
-  // eslint-disable-next-line
-  formatMessage(data) {
-    return flatten(data)[0] || { };
+  info(log, scope, ...args) {
+    super.info.call(this, log, scope, args);
   }
 
-  debug(log, ...args) {
-    this.logger.debug({ message: log, event: this.formatMessage(args) });
-  }
-
-  info(log, ...args) {
-    this.logger.info({ message: log, event: this.formatMessage(args) });
-  }
-
-  error(log, ...args) {
-    this.logger.error({ message: log.message || log, error: args });
-  }
-
-  getScope() {
-    return this.scope.split('/').pop();
+  error(log, scope, ...args) {
+    super.error.call(this, log, scope, args);
   }
 
   getWriteableStream() {
@@ -62,29 +44,23 @@ class PinoAdapter {
     ];
   }
 
-  static serializeError(error) {
-    const err = error.filter((el) => el);
-    if (!err) {
-      return { };
-    }
-    if (err && err[0] && err[0] instanceof Error) {
-      return { name: err[0].name, reason: err[0].message, stack: err.stack };
-    }
-    return { name: 'Error', reason: JSON.stringify(err), stack: {} };
-  }
-
   configure() {
     this.logger = Pino({
       name: this.service,
       level: this.logLevel,
       messageKey: 'message',
       serializers: {
-        error: PinoAdapter.serializeError,
+        error: BaseLogger.serializeError,
       },
       formatters: {
         level: (label) => ({ level: label.toUpperCase() }),
       },
       streams: this.getTransports(),
+    });
+    this.logger = this.logger.child({
+      microservice: this.service,
+      zone: this.zone,
+      env: this.env,
     });
   }
 }
