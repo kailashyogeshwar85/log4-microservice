@@ -21,16 +21,16 @@ class PinoAdapter extends BaseLogger {
     this.configure();
   }
 
-  debug(log, ...args) {
-    this.logger.debug({ message: log, event: this.formatMessage(args) });
+  debug(log, scope, ...args) {
+    super.debug.call(this, log, scope, args);
   }
 
-  info(log, ...args) {
-    this.logger.info({ message: log, event: this.formatMessage(args) });
+  info(log, scope, ...args) {
+    super.info.call(this, log, scope, args);
   }
 
-  error(log, ...args) {
-    this.logger.error({ message: log.message || log, error: args });
+  error(log, scope, ...args) {
+    super.error.call(this, log, scope, args);
   }
 
   getWriteableStream() {

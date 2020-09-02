@@ -13,6 +13,7 @@ class BaseLogger {
     this.logger.debug({
       meta: scope,
       message: log,
+      correlationIds: args.pop(),
       event: this.formatMessage(args),
     });
   }
@@ -21,6 +22,7 @@ class BaseLogger {
     this.logger.info({
       meta: scope,
       message: log,
+      correlationIds: args.pop(),
       event: this.formatMessage(args),
     });
   }
@@ -28,13 +30,13 @@ class BaseLogger {
   error(log, scope, args = []) {
     this.logger.error({
       meta: scope,
+      correlationIds: args.pop(),
       message: log.message || log,
       error: BaseLogger.serializeError(args),
     });
   }
 
   static prettyMessage(log) {
-    // console.log(log);
     const colorize = format.colorize({ colors: { info: 'white' } });
     const service  = log.level === 'info'
       ? ` [${log.microservice}] [${log.meta.substr(0, 6)}]`
@@ -42,7 +44,8 @@ class BaseLogger {
     const mesg  = log.level === 'info' && /^\s+/.test(log.message) ? log.message.substr(1) : log.message;
     return colorize.colorize(
       log.level,
-      `${log.level.toUpperCase()} ${service} ${mesg} ${JSON.stringify(log.event || log.error)}`,
+      // eslint-disable-next-line
+      `${log.level.toUpperCase()} ${service} ${mesg} ${JSON.stringify(log.event || log.error)} ${JSON.stringify({ correlationIds: log.correlationIds })}`,
     );
   }
 

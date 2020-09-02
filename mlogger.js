@@ -1,5 +1,5 @@
-const { sep }       = require('path');
-const LoggerFactory = require('./factory/LoggerFactory');
+const { sep }        = require('path');
+const LoggerFactory  = require('./factory/LoggerFactory');
 
 class MLogger {
   // for multiple adapters
@@ -13,8 +13,9 @@ class MLogger {
 
   static Adapter = null;
 
-  constructor(scope) {
+  constructor(scope, context) {
     this.scope = MLogger.parsePathToScope(scope || MLogger.defaultScope);
+    this.context = (context && typeof context === 'object' && !Array.isArray(context)) ? context : { };
   }
 
   static addAdapter(adapterName, adapterInstance) {
@@ -48,26 +49,26 @@ class MLogger {
     return MLogger.AdapterName;
   }
 
-  debug(msg, arg) {
-    this.log('debug', msg, this.scope, arg);
+  debug(msg, arg, correlationIds) {
+    this.log('debug', msg, this.scope, arg, correlationIds);
   }
 
-  info(msg, arg) {
-    this.log('info', msg, this.scope, arg);
+  info(msg, arg, correlationIds) {
+    this.log('info', msg, this.scope, arg, correlationIds);
   }
 
-  error(msg, arg) {
-    this.log('error', msg, this.scope, arg);
+  error(msg, arg, correlationIds) {
+    this.log('error', msg, this.scope, arg, correlationIds);
   }
 
-  log(level = 'debug', msg, scope = this.scope, args) {
+  log(level = 'debug', msg, scope = this.scope, args, correlationIds = {}) {
     if (!MLogger.Adapter) {
       throw new Error('MLogger not configured');
     }
     if (MLogger.Adapter) {
       this.adapter = MLogger.AdapterMap.get(MLogger.AdapterName);
     }
-    this.adapter[level](msg, scope, args);
+    this.adapter[level](msg, scope, args, { ...correlationIds, ...this.context });
   }
 }
 
