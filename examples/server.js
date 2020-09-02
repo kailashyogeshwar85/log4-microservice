@@ -37,9 +37,9 @@ const getJob = () => ({
   user_id: ++USER_ID,
 });
 
-// setInterval(() => {
-//   new Job(getJob()).processJob();
-// }, 2000);
+ setInterval(() => {
+   new Job(getJob()).processJob();
+}, 2000);
 
 logger.info('Initilazling user controller');
 logger.info('do something');
