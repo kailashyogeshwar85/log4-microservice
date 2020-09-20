@@ -3,8 +3,8 @@ const BunyanAdapter  = require('../adapters/BunyanAdapter');
 const WinstonAdapter = require('../adapters/WinstonAdapter');
 
 /**
- * {description}: Will create and return instance of Adapters
- * @exports
+ * @description: Will create and return instance of Adapters
+ * @exports getAdapter
  * @class LoggerFactory
  */
 

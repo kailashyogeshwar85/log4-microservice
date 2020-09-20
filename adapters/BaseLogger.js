@@ -2,6 +2,7 @@ const flatten      = require('flatten');
 const { format }   = require('winston');
 const { Writable } = require('stream');
 const bunyan       = require('bunyan');
+const strpad       = require('@fav/text.pad');
 
 class BaseLogger {
   // eslint-disable-next-line
@@ -39,8 +40,8 @@ class BaseLogger {
   static prettyMessage(log) {
     const colorize = format.colorize({ colors: { info: 'white' } });
     const service  = log.level === 'info'
-      ? ` [${log.microservice}] [${log.meta.substr(0, 6)}]`
-      : `[${log.microservice}] [${log.meta.substr(0, 6)}]`;
+      ? ` [${log.microservice}] [${strpad(log.meta.substr(0, 6), 6)}]`
+      : `[${log.microservice}] [${strpad(log.meta.substr(0, 6), 6)}]`;
     const mesg  = log.level === 'info' && /^\s+/.test(log.message) ? log.message.substr(1) : log.message;
     return colorize.colorize(
       log.level,

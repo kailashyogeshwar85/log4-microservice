@@ -11,6 +11,7 @@ class PaymentController {
 
   configureLogger() {
     this.logger = new MLogger(__filename);
+    return this;
   }
 
   doSomething() {

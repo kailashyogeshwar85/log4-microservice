@@ -1,15 +1,27 @@
 {
-  "name": "logger-sdk",
+  "name": "log4-microservice",
   "version": "1.0.0",
-  "description": "",
+  "description": "A full packaged logger that supports structured logging with multiple adapters like pino, winston, bunyan. It has support for MDC (mapped domain context) and correlationIds.",
   "main": "mlogger.js",
   "scripts": {
+    "generate-docs": "jsdoc -c ./jsdoc.config.js --verbose",
+    "examples": "node examples/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["logger", "microservices", "pino", "winston", "bunyan", "preetylogs"],
+  "keywords": [
+    "logger",
+    "microservices",
+    "pino",
+    "winston",
+    "bunyan",
+    "preetylogs",
+    "mdc",
+    "correlationid"
+  ],
   "author": "kailash.yogeshwar<kailashyogeshwar85@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "@fav/text.pad": "1.0.3",
     "bunyan": "1.8.14",
     "flatten": "1.0.3",
     "fs-extra": "9.0.1",
@@ -21,6 +33,10 @@
     "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "lodash.delay": "^4.1.1"
+    "lodash.delay": "^4.1.1",
+    "jsdoc": "^3.6.5",
+    "jsdoc-template": "^1.2.0",
+    "jsdoc-typeof-plugin": "^1.0.0",
+    "tsd-jsdoc": "^2.5.0"
   }
 }

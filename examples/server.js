@@ -6,6 +6,7 @@ process.env.LOG_FILE    = 'payment.log';
 
 const MLogger = require('../mlogger');
 const UserController = require('./controller');
+const Payment = require('./payment');
 
 function configureLogger() {
   const logOptions = {
@@ -21,7 +22,8 @@ configureLogger();
 
 const logger = new MLogger(__filename);
 
-// logger.log('debug', 'starting to listen for new job on queue: payments');
+
+logger.log('debug', 'starting to listen for new job on queue: payments');
 
 const Job = require('./job');
 
@@ -37,8 +39,8 @@ const getJob = () => ({
   user_id: ++USER_ID,
 });
 
- setInterval(() => {
-   new Job(getJob()).processJob();
+setInterval(() => {
+  new Job(getJob()).processJob();
 }, 2000);
 
 logger.info('Initilazling user controller');
@@ -49,3 +51,7 @@ const user = new UserController();
 user.doSomething();
 
 logger.error(new Error('GatewayError: Failed to process payment transaction'));
+
+setInterval(() => {
+  new Payment().configureLogger().doSomething();
+}, 3000);
