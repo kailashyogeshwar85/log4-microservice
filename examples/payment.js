@@ -1,4 +1,4 @@
-const MLogger = require('../mlogger');
+const MLogger = require('../logger');
 
 class PaymentController {
   constructor(logger = undefined) {

@@ -3,11 +3,21 @@ const {
   createLogger,
   transports,
   format,
-}                        = require('winston');
-const { ensureDirSync }  = require('fs-extra');
-const BaseLogger         = require('./BaseLogger');
+} = require('winston');
+const { ensureDirSync } = require('fs-extra');
+const BaseLogger = require('./BaseLogger');
 
+/**
+ * WinstonAdapter for logging
+ * @class WinstonAdapter
+ * @extends BaseLogger
+ */
 class WinstonAdapter extends BaseLogger {
+  /**
+   * Creates an instance of WinstonAdapter.
+   * @constructor
+   * @param {LogOptions} logOptions options for configuring adapter
+   */
   constructor(logOptions) {
     super(logOptions);
     this.env = process.env.NODE_ENV || process.env.NODE || 'local';
@@ -21,18 +31,51 @@ class WinstonAdapter extends BaseLogger {
     this.configure();
   }
 
+  /**
+   * Writes/Prints debug log event
+   *
+   * @override
+   * @param {any} log - Log Message to be printed
+   * @param {scope} scope - Scope (filename) to be used as log originator default: app
+   * @param {any} args - Event data to be logged
+   * @memberof WinstonAdapter
+  */
   debug(log, scope, ...args) {
     super.debug.call(this, log, scope, args);
   }
 
+  /**
+   * Writes/Prints info log event
+   *
+   * @override
+   * @param {any} log - Log Message to be printed
+   * @param {scope} scope - Scope (filename) to be used as log originator default: app
+   * @param {any} args - Event data to be logged
+   * @memberof WinstonAdapter
+   */
   info(log, scope, ...args) {
     super.info.call(this, log, scope, args);
   }
 
+  /**
+  * Writes and prints error event log
+  *
+  * @override
+  * @param {any} log - Log Message to be printed
+  * @param {scope} scope - Scope (filename) to be used as log originator default: app
+  * @param {any} args - Event data to be logged
+  * @memberof WinstonAdapter
+  */
   error(log, scope, ...args) {
     super.error.call(this, log, scope, args);
   }
 
+  /**
+   * Returns the transports for logging ie. Stdout, FileStream
+   * @private
+   * @return {Object} Stdout, FileTransport configurations
+   * @memberof WinstonAdapter
+   */
   getTransports() {
     const consoleOptions = new transports.Console({
       level: this.logLevel,
@@ -56,6 +99,13 @@ class WinstonAdapter extends BaseLogger {
     return { consoleOptions, fileOptions };
   }
 
+  /**
+   * Configures the Adapter with {@link LogOptions}
+   *
+   * @public
+   * @returns {void} nothing
+   * @memberof WinstonAdapter
+   */
   configure() {
     const transportOptions = this.getTransports();
     this.logger = createLogger({

@@ -4,7 +4,7 @@ module.exports = {
     dictionaries: ['jsdoc'],
   },
   source: {
-    include: ['mlogger.js', 'typedefs.js', 'adapters', 'factory', 'README.md'],
+    include: ['logger.js', 'typedefs.js', 'adapters', 'factory', 'README.md'],
     includePattern: '.js$',
     exclude: ['node_modules', '.gitignore', '.git', 'test', 'examples', 'docs', 'jsdoc.config.js', 'doctemplate'],
   },

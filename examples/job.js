@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 const delay   = require('lodash.delay');
 
-const MLogger = require('../mlogger');
+const MLogger = require('../logger');
 
 class Job {
   constructor(job) {

@@ -4,7 +4,7 @@ process.env.LOG_LEVEL   = 'debug';
 process.env.LOG_PATH    = 'logs';
 process.env.LOG_FILE    = 'payment.log';
 
-const MLogger = require('../mlogger');
+const MLogger = require('../logger');
 const UserController = require('./controller');
 const Payment = require('./payment');
 

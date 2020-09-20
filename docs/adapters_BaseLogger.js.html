@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      typedefs.js - Documentation
+      adapters/BaseLogger.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -83,7 +83,7 @@
   <div id="main">
     
       <h1 class="page-title">
-        typedefs.js
+        adapters/BaseLogger.js
       </h1>
     
 
@@ -92,63 +92,85 @@
 
 <section>
   <article>
-    <pre class="prettyprint source linenums"><code>/**
- * @namespace typedefs
-*/
+    <pre class="prettyprint source linenums"><code>const flatten      = require('flatten');
+const { format }   = require('winston');
+const { Writable } = require('stream');
+const bunyan       = require('bunyan');
+const strpad       = require('@fav/text.pad');
 
 /**
- * @typedef {string} scope filename to be used as scope for logging.
+ * @type {BaseLogger}
  */
+class BaseLogger {
+  // eslint-disable-next-line
+  formatMessage(data) {
+    return flatten(data)[0] || {};
+  }
 
-/**
- * @typedef  {object} LogOptions
- * @property {string} level  Log Level DEBUG, INFO, ERROR
- * @property {string}  logPath Logs directory path
- * @property {string}  logFile Log file name
-*/
+  debug(log, scope, args = []) {
+    this.logger.debug({
+      meta: scope,
+      message: log,
+      correlationIds: args.pop(),
+      event: this.formatMessage(args),
+    });
+  }
 
-/**
- * @typedef {Function} debug
- * @param {any} log log message to be written
- * @param {string} scope filename to be used in log
- * @param {any} args any additional data to be logged
- */
+  info(log, scope, args = []) {
+    this.logger.info({
+      meta: scope,
+      message: log,
+      correlationIds: args.pop(),
+      event: this.formatMessage(args),
+    });
+  }
 
-/**
- * @typedef {Function} info
- * @param {any} log log message to be written
- * @param {string} scope filename to be used in log
- * @param {any} args any additional data to be logged
- */
+  error(log, scope, args = []) {
+    this.logger.error({
+      meta: scope,
+      correlationIds: args.pop(),
+      message: log.message || log,
+      error: BaseLogger.serializeError(args),
+    });
+  }
 
-/**
- * @typedef {Function} error
- * @param {any} log log message to be written
- * @param {string} scope filename to be used in log
- * @param {any} args any additional data to be logged
- */
+  static prettyMessage(log) {
+    const colorize = format.colorize({ colors: { info: 'white' } });
+    const service  = log.level === 'info'
+      ? ` [${log.microservice}] [${strpad(log.meta.substr(0, 6), 6)}]`
+      : `[${log.microservice}] [${strpad(log.meta.substr(0, 6), 6)}]`;
+    const mesg  = log.level === 'info' &amp;&amp; /^\s+/.test(log.message) ? log.message.substr(1) : log.message;
+    return colorize.colorize(
+      log.level,
+      // eslint-disable-next-line
+      `${log.level.toUpperCase()} ${service} ${mesg} ${JSON.stringify(log.event || log.error)} ${JSON.stringify({ correlationIds: log.correlationIds })}`,
+    );
+  }
 
-/**
- * BaseLogger definition
- * @typedef {class} BaseLogger creates a logger instance
- * @property {Function} formatMessage formats a message
- * @property {debug} debug logs a debug event
- * @property {info} info logs a info event
- * @property {error} info logs error event
- * @property {Function} preetyMessage returns the colorized formatted string
- * @property {Function} serializeError serializes an error stack
- * @property {Function} customFormat returns the writeable stream to log data
- */
+  static serializeError(error) {
+    const err = error.filter((el) => el);
+    if (!err) {
+      return {};
+    }
+    if (err &amp;&amp; err[0] &amp;&amp; err[0] instanceof Error) {
+      return { name: err[0].name, reason: err[0].message, stack: err[0].stack };
+    }
+    return { name: 'Error', reason: JSON.stringify(err), stack: {} };
+  }
 
-/**
- * @typedef  {class} LogAdapter LogAdapter
- * @property {Function} debug creating debug logs
- * @property {Function} info creating info logs
- * @property {Function} error creating error logs
- * @property {Function} getTransports Returns the transport for writing the logs
- * @property {Function} configure Configures the adapter with specified configuration.
- *
- */
+  static customFormatStream() {
+    const ws = new Writable();
+    ws.write = (obj) => {
+      const log = obj;
+      log.level = bunyan.nameFromLevel[obj.level];
+      process.stdout.write(BaseLogger.prettyMessage(log));
+      process.stdout.write('\n');
+    };
+    return ws;
+  }
+}
+
+module.exports = BaseLogger;
 </code></pre>
   </article>
 </section>

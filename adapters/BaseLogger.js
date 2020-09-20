@@ -4,6 +4,9 @@ const { Writable } = require('stream');
 const bunyan       = require('bunyan');
 const strpad       = require('@fav/text.pad');
 
+/**
+ * @type {BaseLogger}
+ */
 class BaseLogger {
   // eslint-disable-next-line
   formatMessage(data) {

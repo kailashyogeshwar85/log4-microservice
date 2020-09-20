@@ -1,5 +1,5 @@
-const PinoAdapter    = require('../adapters/PinoAdapter');
-const BunyanAdapter  = require('../adapters/BunyanAdapter');
+const PinoAdapter = require('../adapters/PinoAdapter');
+const BunyanAdapter = require('../adapters/BunyanAdapter');
 const WinstonAdapter = require('../adapters/WinstonAdapter');
 
 /**
@@ -7,8 +7,16 @@ const WinstonAdapter = require('../adapters/WinstonAdapter');
  * @exports getAdapter
  * @class LoggerFactory
  */
-
 class LoggerFactory {
+  /**
+  * Gets the instances of the adapter for defined scope
+  * @static
+  * @param {('pino'|'winston'|'bunyan')} adapterName - name of adapter to be used for logging
+  * @param {logOptions} logOptions - LogOptions for logging
+  * @return {LogAdapter} - Instance of Adapter
+  * @throws {Error} - LoggerError when invalid adapter is provided.
+  * @memberof LoggerFactory
+  */
   static getAdapter(adapterName, logOptions) {
     switch (adapterName) {
       case 'pino':

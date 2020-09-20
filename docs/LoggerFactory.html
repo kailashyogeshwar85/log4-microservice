@@ -75,7 +75,7 @@
 
     
 
-    <h3>Classes</h3><ul><li id="LoggerFactory-nav"><a href="LoggerFactory.html">LoggerFactory</a></li></ul><h3 id="global-nav"><a href="global.html">Global</a></h3>
+    <h3>Classes</h3><ul><li id="BaseLogger-nav"><a href="global.html#BaseLogger">BaseLogger</a></li><li id="BunyanAdapter-nav"><a href="BunyanAdapter.html">BunyanAdapter</a><ul class='methods'><li data-type="method" id="BunyanAdapter-configure-nav"><a href="BunyanAdapter.html#configure">configure</a></li><li data-type="method" id="BunyanAdapter-debug-nav"><a href="BunyanAdapter.html#debug">debug</a></li><li data-type="method" id="BunyanAdapter-error-nav"><a href="BunyanAdapter.html#error">error</a></li><li data-type="method" id="BunyanAdapter-getTransports-nav"><a href="BunyanAdapter.html#getTransports">getTransports</a></li><li data-type="method" id="BunyanAdapter-getWriteableStream-nav"><a href="BunyanAdapter.html#getWriteableStream">getWriteableStream</a></li><li data-type="method" id="BunyanAdapter-info-nav"><a href="BunyanAdapter.html#info">info</a></li></ul></li><li id="Log4Microservice-nav"><a href="Log4Microservice.html">Log4Microservice</a></li><li id="LoggerFactory-nav"><a href="LoggerFactory.html">LoggerFactory</a><ul class='methods'><li data-type="method" id="LoggerFactory-getAdapter-nav"><a href="LoggerFactory.html#.getAdapter">getAdapter</a></li></ul></li><li id="PinoAdapter-nav"><a href="PinoAdapter.html">PinoAdapter</a><ul class='methods'><li data-type="method" id="PinoAdapter-configure-nav"><a href="PinoAdapter.html#configure">configure</a></li><li data-type="method" id="PinoAdapter-debug-nav"><a href="PinoAdapter.html#debug">debug</a></li><li data-type="method" id="PinoAdapter-error-nav"><a href="PinoAdapter.html#error">error</a></li><li data-type="method" id="PinoAdapter-getTransports-nav"><a href="PinoAdapter.html#getTransports">getTransports</a></li><li data-type="method" id="PinoAdapter-getWriteableStream-nav"><a href="PinoAdapter.html#getWriteableStream">getWriteableStream</a></li><li data-type="method" id="PinoAdapter-info-nav"><a href="PinoAdapter.html#info">info</a></li></ul></li><li id="WinstonAdapter-nav"><a href="WinstonAdapter.html">WinstonAdapter</a><ul class='methods'><li data-type="method" id="WinstonAdapter-configure-nav"><a href="WinstonAdapter.html#configure">configure</a></li><li data-type="method" id="WinstonAdapter-debug-nav"><a href="WinstonAdapter.html#debug">debug</a></li><li data-type="method" id="WinstonAdapter-error-nav"><a href="WinstonAdapter.html#error">error</a></li><li data-type="method" id="WinstonAdapter-getTransports-nav"><a href="WinstonAdapter.html#getTransports">getTransports</a></li><li data-type="method" id="WinstonAdapter-info-nav"><a href="WinstonAdapter.html#info">info</a></li></ul></li></ul><h3 id="global-nav"><a href="global.html">Global</a></h3>
   </nav>
 
   <div id="main">
@@ -204,6 +204,230 @@
 
     
 
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#.getAdapter">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id=".getAdapter">
+      <span class="type-signature">(static) </span>getAdapter<span class="signature">(adapterName, logOptions)</span><span class="type-signature"> &rarr; {<a href="global.html#LogAdapter">LogAdapter</a>}</span>
+    </h4>
+  </span>
+
+  
+
+
+
+  <div class="description">
+    <p>Gets the instances of the adapter for defined scope</p>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>adapterName</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      'pino'
+    </span>
+
+    |
+
+    <span class="param-type">
+      'winston'
+    </span>
+
+    |
+
+    <span class="param-type">
+      'bunyan'
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>name of adapter to be used for logging</p>
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>logOptions</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      logOptions
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          <p>LogOptions for logging</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="factory_LoggerFactory.js.html">factory/LoggerFactory.js</a>, <a href="factory_LoggerFactory.js.html#line20">line 20</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+  <h5>Throws:</h5>
+  
+      
+
+  <dl>
+    <dt>
+      <div class="param-desc">
+        <ul>
+<li>LoggerError when invalid adapter is provided.</li>
+</ul>
+      </div>
+    </dt>
+    <dd></dd>
+    <dt>
+      <dl>
+        <dt>Type</dt>
+        <dd>
+          
+    <span class="param-type">
+      Error
+    </span>
+
+    
+
+
+        </dd>
+      </dl>
+    </dt>
+    <dd></dd>
+  </dl>
+
+
+    
+
+
+
+      
     
 
     
