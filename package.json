@@ -1,6 +1,6 @@
 {
   "name": "log4-microservice",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A full packaged logger that supports structured logging with multiple adapters like pino, winston, bunyan. It has support for MDC (mapped domain context) and correlationIds.",
   "main": "logger.js",
   "scripts": {
