@@ -1,4 +1,4 @@
-const MLogger = require('../logger');
+const { Log4Microservice } = require('../logger');
 
 class PaymentController {
   constructor(logger = undefined) {
@@ -10,7 +10,7 @@ class PaymentController {
   }
 
   configureLogger() {
-    this.logger = new MLogger(__filename);
+    this.logger = new Log4Microservice(__filename);
     return this;
   }
 

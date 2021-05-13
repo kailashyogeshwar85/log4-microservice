@@ -9,50 +9,6 @@ const LoggerFactory = require('./factory/LoggerFactory');
  */
 class Log4Microservice {
   /**
-   *
-   * defaultScope for Logger
-   *
-   * @type {scope}
-   * @static
-   * @memberof Logger
-   */
-
-  static defaultScope = 'app';
-
-  /**
-  *
-  * Map containing adapter instances
-  * @type {Map<LogAdapter>}
-  * @static
-  * @memberof Logger
-  */
-  static AdapterMap = new Map();
-
-  /**
-   * LogOptions to use for creating logs
-   *
-   * @static
-   * @type {LogOptions}
-   * @memberof Logger
-   */
-  static LogOptions = {};
-
-  /**
-  * Adapter Name to be used for Logging
-  *
-  * @static
-  * @type {string}
-  * @memberof Logger
-  */
-  static AdapterName = '';
-
-  /**
-  * @type {LogAdapter}
-  * @static
-  */
-  static Adapter = null;
-
-  /**
   * Creates instance of Logger
   *
   * @constructor
@@ -145,7 +101,7 @@ class Log4Microservice {
    * @return {void}
    */
   debug(msg, ...arg) {
-    this.log('debug', msg, this.scope, arg, arg.pop());
+    this.log('debug', msg, arg, arg.pop());
   }
 
   /**
@@ -157,7 +113,7 @@ class Log4Microservice {
    * @return {void}
    */
   info(msg, ...arg) {
-    this.log('info', msg, this.scope, arg.pop());
+    this.log('info', msg, arg.pop());
   }
 
   /**
@@ -169,8 +125,8 @@ class Log4Microservice {
    * @memberof Logger
    * @return {void}
    */
-  error(msg, ...arg) {
-    this.log('error', msg, this.scope, arg.pop());
+  error(msg, error, ...arg) {
+    this.log('error', msg, error, arg.pop());
   }
 
   /**
@@ -178,20 +134,69 @@ class Log4Microservice {
    *
    * @param {string} [level='debug'] log level defaults to debug
    * @param {any} msg log message to be recorded
-   * @param {scope} [scope=app] scope to be used in logs.
    * @param {any} args correlationIds
    * @memberof Logger
    * @return {void}
    */
-  log(level = 'debug', msg, scope = this.scope, ...args) {
+  log(level = 'debug', msg, ...args) {
     if (!Log4Microservice.Adapter) {
       throw new Error('Log4Microservice not configured');
     }
     if (Log4Microservice.Adapter) {
       this.adapter = Log4Microservice.AdapterMap.get(Log4Microservice.AdapterName);
     }
-    this.adapter[level](msg, scope, args, { ...args.pop(), ...this.context });
+
+    if (!this.adapter[level]) {
+      msg = level;
+      level = 'info';
+    }
+    this.adapter[level](msg, this.scope, args, { ...args.pop(), ...this.context });
   }
 }
 
-module.exports = Log4Microservice;
+/**
+  *
+  * defaultScope for Logger
+  *
+  * @type {scope}
+  * @static
+  * @memberof Logger
+  */
+Log4Microservice.defaultScope = 'app';
+
+/**
+  *
+  * Map containing adapter instances
+  * @type {Map<LogAdapter>}
+  * @static
+  * @memberof Log4Microservice
+  */
+Log4Microservice.AdapterMap = new Map();
+
+/**
+  * LogOptions to use for creating logs
+  *
+  * @static
+  * @type {LogOptions}
+  * @memberof Log4Microservice
+  */
+Log4Microservice.LogOptions = {};
+
+/**
+ * Adapter Name to be used for Logging
+ *
+ * @static
+ * @type {string}
+ * @memberof Log4Microservice
+ */
+Log4Microservice.AdapterName = '';
+
+/**
+ * @type {LogAdapter}
+ * @static
+ */
+Log4Microservice.Adapter = null;
+
+module.exports = {
+  Log4Microservice,
+};

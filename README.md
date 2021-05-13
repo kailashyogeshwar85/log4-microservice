@@ -20,10 +20,11 @@ LoggerSDK for Microservices with multiple adapters eg: Pino, Winston, Bunyan.
 ```
   // Entry Point of your Microservice
   // server.js
-  const Logger = require('log4-microservice');
+  const { Log4Microservice } = require('../logger');
+
 
   // Typescript
-  // import * as Logger from 'log4-microservice'
+  // import { Log4Microservice } from 'log4-microservice'
 
   //...other initialization code
   function configureLogger() {
@@ -33,8 +34,8 @@ LoggerSDK for Microservices with multiple adapters eg: Pino, Winston, Bunyan.
       logFile: process.env.LOG_FILE,
   };
 
-  Logger.setLoggerOptions(logOptions);
-  Logger.addAdapter(process.env.LOG_ADAPTER, MLogger.setAdapter(process.env.LOG_ADAPTER));
+  Log4Microservice.setLoggerOptions(logOptions);
+  Log4Microservice.addAdapter(process.env.LOG_ADAPTER, Log4Microservice.setAdapter(process.env.LOG_ADAPTER));
 }
 
 // should be configured once hence in entry point file
@@ -44,8 +45,8 @@ configureLogger();
 - Step2 : Create instances
 ```
 // mymodule.js
-const Logger = require('log4-microservice');
-const logger = new Logger('mymodule');
+const { Log4Microservice } = require('log4-microservice');
+const logger = new Log4Microservice('mymodule');
 logger.debug('debug');
 logger.info('info');
 logger.error(new Error());

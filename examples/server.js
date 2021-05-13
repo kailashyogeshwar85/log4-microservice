@@ -4,7 +4,7 @@ process.env.LOG_LEVEL   = 'debug';
 process.env.LOG_PATH    = 'logs';
 process.env.LOG_FILE    = 'payment.log';
 
-const MLogger = require('../logger');
+const { Log4Microservice } = require('../logger');
 const UserController = require('./controller');
 const Payment = require('./payment');
 
@@ -15,12 +15,12 @@ function configureLogger() {
     logFile: process.env.LOG_FILE,
   };
 
-  MLogger.setLoggerOptions(logOptions);
-  MLogger.addAdapter(process.env.LOG_ADAPTER, MLogger.setAdapter(process.env.LOG_ADAPTER));
+  Log4Microservice.setLoggerOptions(logOptions);
+  Log4Microservice.addAdapter(process.env.LOG_ADAPTER, Log4Microservice.setAdapter(process.env.LOG_ADAPTER));
 }
 configureLogger();
 
-const logger = new MLogger(__filename);
+const logger = new Log4Microservice(__filename);
 
 
 logger.log('debug', 'starting to listen for new job on queue: payments');
@@ -55,3 +55,6 @@ logger.error(new Error('GatewayError: Failed to process payment transaction'));
 setInterval(() => {
   new Payment().configureLogger().doSomething();
 }, 3000);
+
+
+logger.log('hola is pola');

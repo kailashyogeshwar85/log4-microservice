@@ -9,8 +9,8 @@
 /**
  * @typedef  {object} LogOptions
  * @property {string} level  Log Level DEBUG, INFO, ERROR
- * @property {string}  logPath Logs directory path
- * @property {string}  logFile Log file name
+ * @property {string} logPath Logs directory path
+ * @property {string} logFile Log file name
 */
 
 /**

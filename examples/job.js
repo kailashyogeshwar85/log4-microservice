@@ -1,12 +1,12 @@
 // eslint-disable-next-line
 const delay   = require('lodash.delay');
 
-const MLogger = require('../logger');
+const { Log4Microservice } = require('../logger');
 
 class Job {
   constructor(job) {
     this.job = job;
-    this.logger = new MLogger(__filename, { job_id: job.id });
+    this.logger = new Log4Microservice(__filename, { job_id: job.id });
   }
 
   updateBalance() {
