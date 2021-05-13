@@ -20,7 +20,7 @@ LoggerSDK for Microservices with multiple adapters eg: Pino, Winston, Bunyan.
 ```
   // Entry Point of your Microservice
   // server.js
-  const { Log4Microservice } = require('../logger');
+  const { Log4Microservice } = require('log4-microservice');
 
 
   // Typescript
